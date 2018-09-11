@@ -1,6 +1,8 @@
 from fabric import Connection
 from fabric import task
 
+import os
+
 
 _my_hosts = [
     'dockerpi',
@@ -26,6 +28,24 @@ def sudo(c, command):
 @task
 def known_hosts(c):
     print(_my_hosts)
+
+
+@task
+def ping(c):
+    print("\nPinging '{host}' ...".format(host=c.host))
+
+    if os.system("ping -c 1 {host}".format(host=c.host)) == 0:
+        status = "Network Active"
+    else:
+        status = "Network Error"
+
+    print(status)
+
+
+@task
+def reboot(c):
+    print("\nRebooting '{host}' ...".format(host=c.host))
+    sudo(c, 'reboot -h now')
 
 
 @task
