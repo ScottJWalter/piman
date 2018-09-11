@@ -18,7 +18,7 @@ def valid_host(host_name):
     return host_name in _my_hosts
 
 
-def sudo(c, command):
+def sudo_wrapper(c, command):
     if valid_host(c.host):
         return c.sudo(command, warn=True)
     else:
@@ -49,19 +49,19 @@ def ping(c):
 @task
 def reboot(c):
     print("\nRebooting '{host}' ...".format(host=c.host))
-    sudo(c, 'reboot -h now')
+    sudo_wrapper(c, 'reboot -h now')
 
 
 @task
 def update(c):
     print("\nUpdating '{host}' ...".format(host=c.host))
-    sudo(c, 'apt-get update')
+    sudo_wrapper(c, 'apt-get update')
 
 
 @task
 def upgrade(c):
     print("\nUpgrading '{host}' ...".format(host=c.host))
-    sudo(c, 'apt-get upgrade -y')
+    sudo_wrapper(c, 'apt-get upgrade -y')
 
 
 @task
