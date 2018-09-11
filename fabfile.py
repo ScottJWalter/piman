@@ -2,7 +2,7 @@ from fabric import Connection
 from fabric import task
 
 import subprocess
-
+from capturer import CaptureOutput
 
 _my_hosts = [
     'dockerpi',
@@ -32,16 +32,15 @@ def known_hosts(c):
 
 @task
 def ping(c):
-    print("\nPinging '{host}' ...".format(host=c.host))
+    _status = ['UP', 'UNREACHABLE']
 
-    if subprocess.call(["ping", "-q", "-c", "1", c.host]) == 0:
-        status = "UP"
-        return_value = 1
-    else:
-        status = "UNREACHABLE"
-        return_value = 0
+    with CaptureOutput(relay=False):
+        if subprocess.call(["ping", "-q", "-c", "1", c.host]) == 0:
+            return_value = 0
+        else:
+            return_value = 1
 
-    print("Host '{host}' is {status}".format(host=c.host, status=status))
+    print("{host} is {status}".format(host=c.host, status=_status[return_value]))
 
     return return_value
 
@@ -70,9 +69,8 @@ def update_and_upgrade(c):
     upgrade(c)
 
 
-@task
+@task(hosts=_my_hosts)
 def upgrade_all(c):
-    for host in _my_hosts:
-        conn = Connection(host=host, user=_pi_user)
+    with Connection(host=c.host, user=_pi_user) as conn:
         update(conn)
         upgrade(conn)
