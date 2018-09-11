@@ -21,6 +21,11 @@ def sudo(c, command):
 
 
 @task
+def known_hosts(c):
+    print(my_hosts)
+
+
+@task
 def update(c):
     print("\nUpdating '{host}' ...".format(host=c.host))
     sudo(c, 'apt-get update')
