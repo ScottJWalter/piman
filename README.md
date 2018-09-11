@@ -1,4 +1,4 @@
-![Logo of the project](./images/logo.sample.png)
+![Logo of the project](./images/raspberry_pi.png)
 
 # piman
 > Manage multiple raspberry pis
