@@ -1,16 +1,19 @@
+from fabric import Connection
 from fabric import task
 
 
-my_hosts = [
+_my_hosts = [
     'dockerpi',
     'minecraftpi',
     'picroft',
     'pihole',
     ]
 
+_pi_user = 'pi'
+
 
 def valid_host(host_name):
-    return host_name in my_hosts
+    return host_name in _my_hosts
 
 
 def sudo(c, command):
@@ -22,7 +25,7 @@ def sudo(c, command):
 
 @task
 def known_hosts(c):
-    print(my_hosts)
+    print(_my_hosts)
 
 
 @task
@@ -41,3 +44,11 @@ def upgrade(c):
 def update_and_upgrade(c):
     update(c)
     upgrade(c)
+
+
+@task
+def upgrade_all(c):
+    for host in _my_hosts:
+        conn = Connection(host=host, user=_pi_user)
+        update(conn)
+        upgrade(conn)
