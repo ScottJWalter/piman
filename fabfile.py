@@ -1,7 +1,7 @@
 from fabric import Connection
 from fabric import task
 
-import os
+import subprocess
 
 
 _my_hosts = [
@@ -34,16 +34,16 @@ def known_hosts(c):
 def ping(c):
     print("\nPinging '{host}' ...".format(host=c.host))
 
-    if os.system("ping -q -c 1 " + c.host) == 0:
+    if subprocess.call(["ping", "-q", "-c", "1", c.host]) == 0:
         status = "UP"
-        retval = 1
+        return_value = 1
     else:
         status = "UNREACHABLE"
-        retval = 0
+        return_value = 0
 
     print("Host '{host}' is {status}".format(host=c.host, status=status))
 
-    return retval
+    return return_value
 
 
 @task
