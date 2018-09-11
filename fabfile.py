@@ -34,12 +34,12 @@ def known_hosts(c):
 def ping(c):
     print("\nPinging '{host}' ...".format(host=c.host))
 
-    if os.system("ping -c 1 {host}".format(host=c.host)) == 0:
-        status = "Network Active"
+    if os.system("ping -q -c 1 " + c.host) == 0:
+        status = "UP"
     else:
-        status = "Network Error"
+        status = "UNREACHABLE"
 
-    print(status)
+    print("Host '{host}' is {status}".format(host=c.host, status=status))
 
 
 @task
