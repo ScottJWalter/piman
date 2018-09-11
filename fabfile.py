@@ -20,7 +20,7 @@ def valid_host(host_name):
 
 def sudo(c, command):
     if valid_host(c.host):
-        return c.sudo(command)
+        return c.sudo(command, warn=True)
     else:
         print("\nUNKNOWN HOST '{host}'".format(host=c.host))
 
@@ -36,10 +36,14 @@ def ping(c):
 
     if os.system("ping -q -c 1 " + c.host) == 0:
         status = "UP"
+        retval = 1
     else:
         status = "UNREACHABLE"
+        retval = 0
 
     print("Host '{host}' is {status}".format(host=c.host, status=status))
+
+    return retval
 
 
 @task
