@@ -83,6 +83,12 @@ def update_and_upgrade(c):
 
 
 @task(hosts=_my_hosts)
+def update_all(c):
+    with Connection(host=c.host, user=_pi_user) as conn:
+        update(conn)
+
+
+@task(hosts=_my_hosts)
 def upgrade_all(c):
     with Connection(host=c.host, user=_pi_user) as conn:
         update(conn)
