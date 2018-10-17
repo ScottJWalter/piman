@@ -1,10 +1,10 @@
-![Logo of the project](./images/raspberry_pi.png)
+![Fabric](./images/fabric.png)  ![](./images/plus.png) ![Raspberry Pi](./images/raspi.png)
 
 # piman
 > Manage multiple raspberry pis
 
 I have several Raspberry Pis around the office, doing various things (Pihole, Picroft, etc.).
-Trying to keep them updated was tedious until I threw together a simple Fabric script that
+Trying to keep them updated was tedious until I threw together a simple [Fabric][10] script that
 allows me to manage them all from a single set of commands.
 
 ## Installing
@@ -17,10 +17,10 @@ allows me to manage them all from a single set of commands.
 Or start here ...
 
 ```shell
-git clone https://github.com/ScottJWalter/piman.git
-cd piman.git
-pip install -r requirements.txt
-nano config.json
+~$ git clone https://github.com/ScottJWalter/piman.git
+~$ cd piman
+~/piman$ pip install -r requirements.txt
+~/piman$ nano config.json
 ```
 
 ... paste the following into your editor window for `config.json` ...
@@ -67,3 +67,6 @@ root directory.  The file lists all known hosts, and is structured as follows:
 ## Licensing
 
 State what the license is and how to find the text version of the license.
+
+
+[10]: http://www.fabfile.org/
