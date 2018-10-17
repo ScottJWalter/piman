@@ -108,3 +108,5 @@ venv.bak/
 
 # direnv
 .envrc
+
+config.json
