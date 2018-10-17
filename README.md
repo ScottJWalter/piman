@@ -25,7 +25,7 @@ nano config.json
 
 ... paste the following into your editor window for `config.json` ...
 
-```json
+```shell
 {
     'hosts': [
         'raspberrypi',
