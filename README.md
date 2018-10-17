@@ -66,7 +66,7 @@ root directory.  The file lists all known hosts, and is structured as follows:
 
 ## Licensing
 
-State what the license is and how to find the text version of the license.
+This software is released under the [MIT License](LICENSE.md).
 
 
 [10]: http://www.fabfile.org/
