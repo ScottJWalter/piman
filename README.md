@@ -54,7 +54,7 @@ Here you should say what actually happens when you execute the code above.
 The only configuration required is the creation of a `config.json` file in the project
 root directory.  The file lists all known hosts, and is structured as follows:
 
-```json
+```shell
 {
     'hosts': [
         'raspberrypi',
