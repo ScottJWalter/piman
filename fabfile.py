@@ -9,6 +9,7 @@ _my_hosts = [
     'minecraftpi',
     'picroft',
     'pihole',
+    'gateway'
     ]
 
 _pi_user = 'pi'
@@ -26,7 +27,7 @@ def sudo_wrapper(c, command):
 
 
 @task
-def known_hosts(c):
+def list_hosts(c):
     print(_my_hosts)
 
 
@@ -47,26 +48,38 @@ def ping(c):
 
 @task
 def reboot(c):
-    print("\nRebooting '{host}' ...".format(host=c.host))
-    sudo_wrapper(c, 'reboot -h now')
+    if valid_host(c.host):
+        print("\nRebooting '{host}' ...".format(host=c.host))
+        sudo_wrapper(c, 'reboot -h now')
+    else:
+        print("\nUnknown host '{host}'".format(host=c.host))
 
 
 @task
 def update(c):
-    print("\nUpdating '{host}' ...".format(host=c.host))
-    sudo_wrapper(c, 'apt-get update')
+    if valid_host(c.host):
+        print("\nUpdating '{host}' ...".format(host=c.host))
+        sudo_wrapper(c, 'apt-get update')
+    else:
+        print("\nUnknown host '{host}'".format(host=c.host))
 
 
 @task
 def upgrade(c):
-    print("\nUpgrading '{host}' ...".format(host=c.host))
-    sudo_wrapper(c, 'apt-get upgrade -y')
+    if valid_host(c.host):
+        print("\nUpgrading '{host}' ...".format(host=c.host))
+        sudo_wrapper(c, 'apt-get upgrade -y')
+    else:
+        print("\nUnknown host '{host}'".format(host=c.host))
 
 
 @task
 def update_and_upgrade(c):
-    update(c)
-    upgrade(c)
+    if valid_host(c.host):
+        update(c)
+        upgrade(c)
+    else:
+        print("\nUnknown host '{host}'".format(host=c.host))
 
 
 @task(hosts=_my_hosts)
