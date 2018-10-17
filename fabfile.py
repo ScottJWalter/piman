@@ -1,22 +1,24 @@
+#!/usr/bin/env python
 from fabric import Connection
 from fabric import task
-
 import subprocess
 from capturer import CaptureOutput
 
-_my_hosts = [
-    'dockerpi',
-    'minecraftpi',
-    'picroft',
-    'pihole',
-    'gateway'
-    ]
+PI_USER = 'pi'
+CONFIG_FILE = 'config.json'
+MY_HOSTS = []
 
-_pi_user = 'pi'
+try:
+    with open(CONFIG_FILE) as f:
+        # for some reason, trying to JSON.loads() throws an error, so we eval() it instead.
+        # Not really good, but ...
+        MY_HOSTS = eval(f.read())['hosts']
+except ValueError:
+    print('Unable to load hosts file')
 
 
 def valid_host(host_name):
-    return host_name in _my_hosts
+    return host_name in MY_HOSTS
 
 
 def sudo_wrapper(c, command):
@@ -28,7 +30,7 @@ def sudo_wrapper(c, command):
 
 @task
 def list_hosts(c):
-    print(_my_hosts)
+    print(MY_HOSTS)
 
 
 @task
@@ -60,6 +62,7 @@ def update(c):
     if valid_host(c.host):
         print("\nUpdating '{host}' ...".format(host=c.host))
         sudo_wrapper(c, 'apt-get update')
+        print("\nUpdating '{host}' ... DONE!".format(host=c.host))
     else:
         print("\nUnknown host '{host}'".format(host=c.host))
 
@@ -69,6 +72,7 @@ def upgrade(c):
     if valid_host(c.host):
         print("\nUpgrading '{host}' ...".format(host=c.host))
         sudo_wrapper(c, 'apt-get upgrade -y')
+        print("\nUpgrading '{host}' ... DONE!".format(host=c.host))
     else:
         print("\nUnknown host '{host}'".format(host=c.host))
 
@@ -82,14 +86,14 @@ def update_and_upgrade(c):
         print("\nUnknown host '{host}'".format(host=c.host))
 
 
-@task(hosts=_my_hosts)
+@task(hosts=MY_HOSTS)
 def update_all(c):
-    with Connection(host=c.host, user=_pi_user) as conn:
+    with Connection(host=c.host, user=PI_USER) as conn:
         update(conn)
 
 
-@task(hosts=_my_hosts)
+@task(hosts=MY_HOSTS)
 def upgrade_all(c):
-    with Connection(host=c.host, user=_pi_user) as conn:
+    with Connection(host=c.host, user=PI_USER) as conn:
         update(conn)
         upgrade(conn)
